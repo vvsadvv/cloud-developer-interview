@@ -10,6 +10,7 @@
 - **Atlassian Forge**
 - **Docker** (обязательно - Dockerfile + docker-compose)
 - **Jira V3 API** 
+- **Atlassian Forge** - (обязательно)
 - Любой state manager на выбор
 
 ## Функционал
@@ -45,6 +46,7 @@
 - Оптимистичные обновления UI (сразу показать изменения)
 - Подтверждающие диалоги для массовых действий
 - Документация к использованию
+- Все должно быть реализовано при помощи Atlassian forge development platform
 
 
 
