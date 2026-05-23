@@ -1,0 +1,4 @@
+node_modules/
+.forge/
+static/app/node_modules/
+static/app/dist/

@@ -1,0 +1,32 @@
+{
+  "name": "jira-project-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "static/app"
+  ],
+  "scripts": {
+    "dev": "npm run tunnel",
+    "build": "npm run build --workspace static/app",
+    "verify": "npm run typecheck && npm run build",
+    "typecheck": "tsc --noEmit && npm run typecheck --workspace static/app",
+    "forge:analytics:off": "npx forge settings set usage-analytics false",
+    "forge:login": "npx forge login",
+    "forge:register": "npx forge register",
+    "tunnel": "concurrently -n ui,forge -c cyan,yellow \"npm run dev --workspace static/app -- --host 0.0.0.0 --port 3000\" \"npm run forge:analytics:off && npx forge tunnel\"",
+    "deploy": "npm run build && npx forge deploy",
+    "install:jira": "npm run build && npx forge install",
+    "install:app": "npm install --workspace static/app"
+  },
+  "dependencies": {
+    "@forge/api": "^5.1.0",
+    "@forge/resolver": "^1.7.0"
+  },
+  "devDependencies": {
+    "@forge/cli": "^12.20.1",
+    "@types/node": "^22.15.30",
+    "concurrently": "^9.1.2",
+    "typescript": "^5.8.3"
+  }
+}

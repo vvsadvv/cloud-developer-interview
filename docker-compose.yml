@@ -1,0 +1,23 @@
+services:
+  forge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: npm run tunnel
+    ports:
+      - "${VITE_PORT:-3000}:3000"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - .:/app
+      - jira_project_assistant_node_modules:/app/node_modules
+      - jira_project_assistant_ui_node_modules:/app/static/app/node_modules
+      - forge_home:/root/.forge
+    stdin_open: true
+    tty: true
+
+volumes:
+  jira_project_assistant_node_modules:
+  jira_project_assistant_ui_node_modules:
+  forge_home:

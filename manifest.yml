@@ -1,0 +1,28 @@
+modules:
+  jira:projectPage:
+    - key: jira-project-assistant-page
+      resource: main
+      resolver:
+        function: resolver
+      title: Jira Project Assistant
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: static/app/dist
+    tunnel:
+      port: 3000
+permissions:
+  scopes:
+    - read:jira-user
+    - read:jira-work
+    - read:priority:jira
+    - write:jira-work
+  content:
+    styles:
+      - "unsafe-inline"
+app:
+  runtime:
+    name: nodejs22.x
+  id: ari:cloud:ecosystem::app/aa0e1530-fb08-469b-a2ba-396d3a6b464a
