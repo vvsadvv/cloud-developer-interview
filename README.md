@@ -36,10 +36,10 @@ Forge-приложение для Jira Cloud, которое показывае�
 ## Структура проекта
 
 ```text
-jira-project-assistant/
+.
 ├─ manifest.yml
-├─ src/                 # Forge resolver + Jira API слой
-├─ shared/              # Общие типы между frontend и backend
+├─ src/                 # Forge resolver + Jira API layer
+├─ shared/              # Shared types and issue rules
 ├─ static/app/          # React + MUI Custom UI
 ├─ Dockerfile
 └─ docker-compose.yml
@@ -47,17 +47,20 @@ jira-project-assistant/
 
 ## Подготовка
 
-1. При первом использовании выполните `npm run forge:register`, чтобы Forge CLI создал или перерегистрировал `app.id` в [manifest.yml](jira-project-assistant/manifest.yml) под вашим Atlassian-аккаунтом.
+1. При первом использовании выполните `npm run forge:register`, чтобы Forge CLI создал или перерегистрировал `app.id` в `manifest.yml` под вашим Atlassian-аккаунтом.
 2. Убедитесь, что у вас есть Jira Cloud site и доступ для установки Forge app.
 
 ## Запуск через Docker
 
-1. Скопируйте `.env.example` в `.env`, если хотите поменять порт Vite.
-2. Выполните первый логин в Forge CLI внутри контейнера:
+1. Скопируйте `.env.example` в `.env`.
+2. Укажите в `.env`:
 
 ```bash
-docker compose run --rm forge npx forge login
+FORGE_EMAIL=you@example.com
+FORGE_API_TOKEN=your-scoped-token
 ```
+
+Forge CLI в Docker-контейнере обычно не имеет доступа к системному keychain, поэтому по документации Atlassian для контейнерных сред лучше использовать переменные окружения `FORGE_EMAIL` и `FORGE_API_TOKEN`, а не `forge login`: [forge login](/platform/forge/cli-reference/login/), [getting started](https://developer.atlassian.com/platform/forge/getting-started/).
 
 3. Запустите dev-режим:
 
@@ -71,41 +74,37 @@ docker compose up --build
 - запустится `forge tunnel`;
 - ресурс из `manifest.yml` будет проксироваться через tunnel на локальный frontend.
 
-## Локальный запуск без Docker
+## Локальная разработка без Docker
 
 ```bash
 npm install
-npm run build --workspace static/app
-npx forge tunnel
-```
-
-Для разработки:
-
-```bash
+npm run forge:analytics:off
+npm run forge:login
 npm run dev
 ```
 
-Если это первый запуск Forge CLI на машине, один раз выполните:
+Что делает `npm run dev`:
 
-```bash
-npm run forge:analytics:off
-npm run forge:login
-```
+- поднимает Vite dev server на `localhost:3000`
+- запускает `forge tunnel`
+- проксирует Custom UI в Jira project page
 
-Это отключит analytics prompt, который ломает `forge tunnel` в неинтерактивном процессе, и отдельно откроет нормальный интерактивный логин в CLI.
+Важно: не открывайте `localhost:3000` напрямую. Forge bridge работает только внутри Jira, когда страница загружена как Forge app.
+
+Если это первый запуск Forge CLI на машине, команды `forge:analytics:off` и `forge:login` достаточно выполнить один раз.
 
 ## Деплой и установка в Jira
 
 ```bash
 npm run deploy
-npm run install:jira
+npx forge install --site <your-site>.atlassian.net --product jira --environment development
 ```
 
 Или в Docker:
 
 ```bash
 docker compose run --rm forge npm run deploy
-docker compose run --rm forge npm run install:jira
+docker compose run --rm forge npx forge install --site <your-site>.atlassian.net --product jira --environment development
 ```
 
 После установки откройте страницу проекта Jira и найдите `Jira Project Assistant` в списке project apps.
@@ -131,3 +130,9 @@ npm run verify
 ```
 
 Команда прогоняет TypeScript typecheck и сборку Custom UI.
+
+Для Docker-проверки конфигурации полезно выполнить:
+
+```bash
+docker compose config
+```
