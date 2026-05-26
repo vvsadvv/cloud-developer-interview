@@ -151,9 +151,14 @@ export function DashboardHeader({
         <FormControl fullWidth>
           <InputLabel id="project-select-label">Project</InputLabel>
           <Select
+            id="project-select"
             labelId="project-select-label"
             label="Project"
             value={dashboard.selectedProjectKey}
+            inputProps={{
+              id: "project-select-input",
+              name: "projectKey"
+            }}
             onChange={(event) => onProjectChange(event.target.value)}
           >
             {dashboard.projects.map((project) => (

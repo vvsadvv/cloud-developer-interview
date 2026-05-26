@@ -60,7 +60,7 @@ FORGE_EMAIL=you@example.com
 FORGE_API_TOKEN=your-scoped-token
 ```
 
-Forge CLI в Docker-контейнере обычно не имеет доступа к системному keychain, поэтому по документации Atlassian для контейнерных сред лучше использовать переменные окружения `FORGE_EMAIL` и `FORGE_API_TOKEN`, а не `forge login`: [forge login](/platform/forge/cli-reference/login/), [getting started](https://developer.atlassian.com/platform/forge/getting-started/).
+Forge CLI в Docker-контейнере обычно не имеет доступа к системному keychain, поэтому по документации Atlassian для контейнерных сред лучше использовать переменные окружения `FORGE_EMAIL` и `FORGE_API_TOKEN`, а не `forge login`: [forge login](https://developer.atlassian.com/platform/forge/cli-reference/login/), [getting started](https://developer.atlassian.com/platform/forge/getting-started/).
 
 3. Запустите dev-режим:
 

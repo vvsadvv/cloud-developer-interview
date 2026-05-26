@@ -130,12 +130,16 @@ async function paginateArray<T>(
 }
 
 export async function fetchProjects(): Promise<JiraProject[]> {
-  const response = await requestJson<JiraProjectSearchResponse>(
-    api.asApp().requestJira(route`/rest/api/3/project/search?maxResults=${50}`),
-    "Loading Jira projects"
-  );
+  return paginateArray(async (startAt) => {
+    const response = await requestJson<JiraProjectSearchResponse>(
+      api.asApp().requestJira(
+        route`/rest/api/3/project/search?maxResults=${MAX_RESULTS}&startAt=${startAt}`
+      ),
+      "Loading Jira projects"
+    );
 
-  return response.values;
+    return response.values ?? [];
+  });
 }
 
 export async function fetchPriorities(): Promise<JiraPriority[]> {

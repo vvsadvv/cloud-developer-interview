@@ -10,6 +10,7 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
+  FormLabel,
   InputLabel,
   MenuItem,
   Radio,
@@ -85,22 +86,27 @@ export function IssueFixDialog({
                 <FormControl fullWidth>
                   <InputLabel id="assignee-select-label">Project member</InputLabel>
                   <Select
+                    id="assignee-select"
                     labelId="assignee-select-label"
                     label="Project member"
-                  value={selectedAccountId}
-                  onChange={(event) => setSelectedAccountId(event.target.value)}
-                >
-                  {activeMembers.map((member) => (
-                    <MenuItem key={member.accountId} value={member.accountId}>
-                      {member.displayName}
-                      {(() => {
-                        const teamMember = team.find((candidate) => candidate.accountId === member.accountId);
-                        return teamMember ? ` • ${teamMember.assignedIssueCount} issue(s)` : "";
-                      })()}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+                    value={selectedAccountId}
+                    inputProps={{
+                      id: "assignee-select-input",
+                      name: "assigneeAccountId"
+                    }}
+                    onChange={(event) => setSelectedAccountId(event.target.value)}
+                  >
+                    {activeMembers.map((member) => (
+                      <MenuItem key={member.accountId} value={member.accountId}>
+                        {member.displayName}
+                        {(() => {
+                          const teamMember = team.find((candidate) => candidate.accountId === member.accountId);
+                          return teamMember ? ` • ${teamMember.assignedIssueCount} issue(s)` : "";
+                        })()}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
                 <Button
                   variant="contained"
                   color="error"
@@ -123,7 +129,10 @@ export function IssueFixDialog({
                   This issue is too close to its deadline for the current priority level.
                 </Typography>
                 <FormControl>
+                  <FormLabel id="priority-suggestion-label">Recommended priority</FormLabel>
                   <RadioGroup
+                    aria-labelledby="priority-suggestion-label"
+                    name="prioritySuggestion"
                     value={selectedPriority?.id ?? ""}
                     onChange={(event) => {
                       if (issue?.suggestedPriority?.id === event.target.value) {
